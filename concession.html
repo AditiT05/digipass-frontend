@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>School Certificate / Railway Student Concession</title>
+<style>
+  /* Basic print-like style to mimic a certificate */
+  body {
+    font-family: "Times New Roman", Times, serif;
+    background: #f7f7f7;
+    padding: 24px;
+    color: #111;
+  }
+
+  .sheet {
+    max-width: 900px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 28px 36px;
+    border: 1px solid #ccc;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    position: relative;
+    line-height: 1.35;
+  }
+
+  .header {
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap: 16px;
+  }
+
+  .smallcode {
+    text-align:right;
+    font-size:12px;
+    color:#333;
+    line-height:1;
+    min-width:180px;
+  }
+
+  h1.title {
+    font-size:20px;
+    margin: 0;
+    text-align:center;
+    flex:1;
+    letter-spacing:0.6px;
+  }
+
+  .note {
+    margin-top:8px;
+    font-size:12px;
+    color:#333;
+  }
+
+  form.certificate {
+    margin-top: 14px;
+  }
+
+  .line {
+    margin:12px 0;
+    display:flex;
+    gap:12px;
+    align-items:center;
+  }
+
+  .label {
+    min-width:220px;
+    font-weight:600;
+  }
+
+  input[type="text"], input[type="date"], input[type="number"] , select, textarea {
+    font-family: inherit;
+    font-size:14px;
+    padding:6px 8px;
+    border:1px dashed #999;
+    border-radius:4px;
+    background:transparent;
+    outline:none;
+    width:100%;
+    box-sizing:border-box;
+  }
+
+  textarea { min-height:60px; resize:vertical; }
+
+  .grid {
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:12px;
+  }
+
+  .table-block {
+    border:1px solid #ddd;
+    padding:8px;
+    margin-top:10px;
+  }
+
+  .table-block .row {
+    display:flex;
+    justify-content:space-between;
+    padding:6px 0;
+    border-bottom:1px dotted #eee;
+    font-size:14px;
+  }
+
+  .signature-area {
+    margin-top:26px;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+  }
+
+  .principal-block {
+    width:60%;
+  }
+
+  .signature-box {
+    width:36%;
+    text-align:center;
+    position:relative;
+    min-height:120px;
+  }
+
+  .signature-box img.stamp {
+    position:absolute;
+    top:-10px;
+    right:6px;
+    width:110px;
+    opacity:0.95;
+    transform: rotate(-1deg);
+  }
+
+  .signature-box img.signature {
+    width:150px;
+    position:absolute;
+    bottom:30px;
+    left:10px;
+    transform: rotate(-1deg);
+  }
+
+  .small-muted {
+    font-size:12px;
+    color:#444;
+    margin-top:6px;
+  }
+
+  .footer-note {
+    margin-top:18px;
+    font-size:12px;
+    border-top:1px solid #eee;
+    padding-top:10px;
+    color:#333;
+  }
+
+  /* Make it print-friendly */
+  @media print {
+    body { background: white; }
+    .sheet { box-shadow:none; border: none; padding: 8mm; }
+    input, textarea { border: none; border-bottom:1px solid #000; }
+    .signature-box img { -webkit-print-color-adjust: exact; }
+  }
+
+  /* responsive small screens */
+  @media (max-width:640px) {
+    .grid { grid-template-columns: 1fr; }
+    .label { min-width:140px; font-size:13px; }
+  }
+</style>
+</head>
+<body>
+  <div class="sheet" role="main">
+    <div class="header">
+      <div class="smallcode">
+        <div style="margin-top:12px; font-weight:700; font-size:14px;">INDIAN RAILWAYS</div>
+      </div>
+    </div>
+
+    <div style="margin-top:10px; font-size:13px;">
+      <strong>School Certificate to be issued only to Students of not more than 25 years of age.</strong>
+    </div>
+
+    <form class="certificate" id="concessionForm" method="post" action="/concession">
+      <!-- first paragraph as in docx -->
+      <p style="margin-top:14px; text-align:justify; font-size:15px;">
+        I hereby certify that
+        <input type="text" name="student_name" placeholder="Enter the name of the student in full" style="width:48%; margin:0 6px; display:inline-block;">
+        regularly attends this school for the purpose of receiving education, the institution of which I am the Principal / Head Master and his / her age this day, according to my belief and from enquiries I have made, is
+        <input type="number" name="age_years" placeholder="years" min="0" style="width:6.2%; margin:0 6px; display:inline-block;">
+        years,
+        <input type="number" name="age_months" placeholder="months" min="0" style="width:6.2%; margin:0 6px; display:inline-block;">
+        months, his / her date of birth as entered in the School Register being
+        <input type="date" name="dob" style="width:20%; margin:0 6px; display:inline-block;">
+        . He / She is therefore, entitled to the Season Ticket as detailed below at half the full rates charged for adults.
+      </p>
+
+      <!-- table-like details -->
+      <div class="table-block" aria-label="season ticket details">
+        <div class="row" style="font-weight:700;">
+          <div>Class</div>
+          <div>Period</div>
+          <div>From</div>
+          <div>To</div>
+          <div>No. of Season Ticket issued</div>
+        </div>
+
+        <div class="row">
+          <div><input type="text" name="class" placeholder="Class"></div>
+          <div><input type="text" name="period" placeholder="Period (e.g., Half year / Quarter / Month)"></div>
+          <div><input type="text" name="from_station" placeholder="From (station)"></div>
+          <div><input type="text" name="to_station" placeholder="To (station)"></div>
+          <div><input type="number" name="no_of_tickets" placeholder="No" min="0"></div>
+        </div>
+
+        <div class="row" style="margin-top:8px; font-size:14px;">
+          <div style="width:100%;">The Student at present holds <input type="text" name="hold_class" placeholder="Class"> Season Ticket No <input type="text" name="ticket_no" placeholder="Ticket No">
+            From <input type="date" name="current_from"> To <input type="date" name="current_to">
+          </div>
+        </div>
+
+        <div class="row" style="font-size:13px;">
+          <div>If no season ticket is held the word 'NIL' should be inserted.</div>
+        </div>
+      </div>
+
+      <!-- college/school details -->
+      <div class="line" style="margin-top:12px;">
+        <div class="label">Name of College / School</div>
+        <div style="flex:1;"><input type="text" name="institution_name" placeholder="Enter full name of college or school"></div>
+      </div>
+      
+      <div class="signature-area">
+        <div class="principal-block">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <div style="min-width:50px; font-weight:700;">Date:</div>
+            <div style="flex:1;"><input type="date" name="issue_date"></div>
+          </div>
+
+          <div style="margin-top:16px; display:flex; gap:12px; align-items:center;">
+            <div style="min-width:220px; font-weight:700;">Signature of Principal / Head Master :</div>
+          </div>
+        </div>
+
+        <div class="signature-box" aria-hidden="false">
+          <!-- Placeholder for stamp image - replace with your stamp. -->
+          <img src="image/stamp1.png" alt="Stamp placeholder" class="stamp" onerror="this.style.display='none'">
+          <!-- Placeholder for signature image - replace with your signature. -->
+          <img src="image/s.png" alt="Signature placeholder" class="signature" onerror="this.style.display='none'">
+          <div style="position:absolute; bottom:6px; left:30px; font-size:13px; font-weight:600;">
+          </div>
+        </div>
+      </div>
+      <div class="footer-note">
+       <strong> Note:</strong> This Certificate will be valid for three days including the date of issue and if not made use of within that time must be returned to the issuing office for cancellation.
+      </div>
+
+      <div style="margin-top:14px; display:flex; justify-content:flex-end; gap:10px;">
+  <!-- Save Button -->
+        <button type="submit" style="padding:10px 14px; font-size:14px; background:#007bff; color:#fff; border:none; border-radius:4px; cursor:pointer;">
+    Save
+  </button>
+
+      <div style="margin-top:14px; display:flex; justify-content:flex-end; gap:10px;">
+        <button type="button" id="printBtn" disabled onclick="window.print()" style="padding:10px 14px; font-size:14px;">Print</button>
+      </div>
+    </form>
+  </div>
+
+<!--<script>
+  // Minimal client-side behavior: serialize form to console on submit (backend placeholder).
+  document.getElementById('concessionForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // keep here so demo doesn't POST anywhere
+    const fd = new FormData(this);
+    const obj = {};
+    for (const [k,v] of fd.entries()) obj[k]=v;
+    console.log('Form data to send to backend:', obj);
+    // TODO: Replace console.log with fetch() to your backend endpoint that saves the form.
+    alert('Form data ready to send to backend (see console).');
+  });
+</script>-->
+
+<script>
+  const form = document.getElementById('concessionForm');
+  const printBtn = document.getElementById('printBtn');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const fd = new FormData(this);
+    const obj = {};
+    for (const [k, v] of fd.entries()) {
+      obj[k] = v;
+    }
+
+    // Validate required fields
+    if (!obj.student_name || !obj.age_years || !obj.dob || !obj.institution_name) {
+      alert("Please fill in all required fields");
+      return;
+    }
+
+    try {
+      // Fixed URL to match backend route
+      const res = await fetch("http://localhost:8000/api/concession", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(obj)
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert(data.message || "Form saved successfully!");
+
+        // Enable Print button
+        printBtn.disabled = false;
+        printBtn.style.cursor = "pointer";
+        printBtn.style.opacity = "1";
+        printBtn.style.background = "#28a745";
+      } else {
+        alert(data.message || "Error saving form. Please try again.");
+      }
+    } catch (err) {
+      console.error("Connection error:", err);
+      alert("Failed to connect to server. Make sure the backend is running.");
+    }
+  });
+</script>
+
+
+</body>
+</html>

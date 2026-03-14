@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Application History – DigiPass</title>
+  <style>
+    body { 
+      margin:0; 
+      font-family:'Segoe UI', Arial; 
+      color:#333; 
+      /* Grey gradient background */
+      background: linear-gradient(135deg, #e0e0e0, #f4f4f4); 
+    }
+    nav { 
+      display:flex; justify-content:space-between; align-items:center; 
+      padding:15px 40px; background:#fff; border-bottom:1px solid #ddd; 
+    }
+    nav .logo { font-size: 20px; font-weight: bold; color: hsl(144, 71%, 3%); }
+    nav ul { list-style:none; display:flex; gap:20px; margin:0; padding:0; }
+    nav ul li a { text-decoration:none; font-weight:bold; color:#333; }
+    nav ul li a:hover { color:#2a5298; }
+    .container { max-width:1000px; margin:40px auto; padding:20px; }
+    h1 { 
+      text-align: center; margin-bottom: 20px; 
+      background: linear-gradient(45deg, #6a11cb, #2575fc); 
+      -webkit-background-clip: text; 
+      -webkit-text-fill-color: transparent; 
+    }
+    .card { 
+      background:#fff; border-radius:8px; padding:25px; margin-bottom:30px; 
+      box-shadow:0 2px 10px rgba(0,0,0,0.05); 
+    }
+    table { width:100%; border-collapse:collapse; margin-top:20px; }
+    table th, table td { padding:12px; text-align:center; border:1px solid #ddd; }
+    table th { 
+      background: linear-gradient(45deg, #6a11cb, #2575fc); 
+      color:#fff; 
+    }
+    table tr:nth-child(even) { background:#f8f9fc; }
+    .status-applied, .status-not { color:#2a5298; font-weight:bold; }
+    footer { text-align:center; padding:15px; background:#fff; border-top:1px solid #ddd; margin-top:50px; font-size:14px; }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">🚆 DigiPass | Application History</div>
+    <ul>
+      <li><a href="student-dashboard.html">Dashboard</a></li>
+      <li><a href="index.html">Logout</a></li>
+    </ul>
+  </nav>
+
+  <div class="container">
+    <h1>Application History (2025)</h1>
+
+    <div class="card">
+      <canvas id="historyChart" height="120"></canvas>
+    </div>
+
+    <div class="card">
+      <h2 style="text-align:center; background: linear-gradient(45deg, #6a11cb, #2575fc); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: transparent;">Detailed History</h2>
+      <table id="historyTable">
+        <thead>
+          <tr>
+            <th>Month</th>
+            <th>Status</th>
+            <th>Applied Date</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>© 2025 DigiPass | D.G. Ruparel College</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script>
+    const year = 2025;
+    const sampleData = [
+      { month: "Jan", day: 5 },
+      { month: "Feb", day: null },
+      { month: "Mar", day: 12 },
+      { month: "Apr", day: null },
+      { month: "May", day: 20 },
+      { month: "Jun", day: null },
+      { month: "Jul", day: 3 },
+      { month: "Aug", day: null },
+      { month: "Sep", day: 15 },
+      { month: "Oct", day: null },
+      { month: "Nov", day: 9 },
+      { month: "Dec", day: null }
+    ];
+
+    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+
+    // Fill table
+    const tbody = document.querySelector("#historyTable tbody");
+    months.forEach(month => {
+      const monthData = sampleData.find(d => d.month === month);
+      const status = monthData && monthData.day ? '<span class="status-applied">Applied</span>' : '<span class="status-not">Not Applied</span>';
+      const date = monthData && monthData.day ? `${monthData.day} ${month} ${year}` : "-";
+      const row = document.createElement("tr");
+      row.innerHTML = `<td>${month}</td><td>${status}</td><td>${date}</td>`;
+      tbody.appendChild(row);
+    });
+
+    // Scatter chart
+    const scatterData = sampleData.filter(d => d.day).map(d => ({ x: d.month, y: d.day }));
+    const ctx = document.getElementById("historyChart").getContext("2d");
+    new Chart(ctx, {
+      type: "scatter",
+      data: { datasets: [{ label: "Application Day", data: scatterData, backgroundColor: "#6a11cb", pointRadius: 6 }] },
+      options: {
+        responsive: true,
+        scales: {
+          x: { type: "category", labels: months, title: { display:true, text:"Months" } },
+          y: { min:1, max:31, ticks:{ stepSize:2 }, title:{ display:true, text:"Date of Month" } }
+        },
+        plugins: {
+          tooltip: { callbacks: { label: ctx => "Applied on " + ctx.parsed.y + " " + ctx.label + " " + year } }
+        }
+      }
+    });
+  </script>
+</body>
+</html>

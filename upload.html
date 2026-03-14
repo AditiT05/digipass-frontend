@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Upload Documents – DigiPass</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      color: #333;
+    }
+
+    /* Navbar */
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 40px;
+      background: #f8f8f8;
+      border-bottom: 1px solid #ddd;
+    }
+    nav .logo {
+      font-size: 20px;
+      font-weight: bold;
+      color: hsl(144, 71%, 3%);
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      margin: 0;
+      padding: 0;
+    }
+    nav ul li a {
+      color: #333;
+      text-decoration: none;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    nav ul li a:hover {
+      color: #2a5298;
+    }
+
+    /* Form Container */
+    .container {
+      max-width: 700px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f8f8f8;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      /* Purple–blue gradient text */
+      background: linear-gradient(45deg, #6a11cb, #2575fc);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      /* For other browsers */
+      background-clip: text;
+      color: transparent;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    label {
+      font-weight: bold;
+      margin-bottom: 5px;
+      display: block;
+    }
+    input[type="file"] {
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      background: #fff;
+    }
+    .preview {
+      margin-top: 8px;
+      font-size: 14px;
+      color: #555;
+    }
+    .preview img {
+      max-width: 150px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    button {
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 10px;
+      /* Purple–blue gradient background */
+      background: linear-gradient(45deg, #6a11cb, #2575fc);
+      color: #fff;
+      display: block;
+      font-weight: 600;
+      transition: background 0.3s ease, transform 0.2s ease;
+      align-self: center;        /* centers inside flex column */
+      width: auto;               /* shrink to its content */
+      padding: 12px 28px;        /* optional: give a bit more horizontal padding */
+    }
+    
+    button:hover {
+      /* Slightly darker gradient on hover */
+      background: linear-gradient(45deg, #5a0fb9, #1e63e5);
+      transform: translateY(-2px);
+    }
+
+    .note {
+      font-size: 13px;
+      color: #555;
+    }
+
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #f8f8f8;
+      border-top: 1px solid #ddd;
+      font-size: 14px;
+      margin-top: 40px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">🚆 DigiPass | Upload Documents</div>
+    <ul>
+      <li><a href="student-dashboard.html">Dashboard</a></li>
+      <li><a href="index.html">Logout</a></li>
+    </ul>
+  </nav>
+
+  <!-- Upload Form -->
+  <div class="container">
+    <h1>Upload Required Documents</h1>
+    <form id="uploadForm">
+      <div>
+        <label for="college-id">College ID Card <span style="color:red">*</span></label>
+        <input type="file" id="college-id" accept=".jpg,.jpeg,.png,.pdf" required>
+        <p class="note">Accepted formats: JPG, PNG, PDF</p>
+        <div class="preview" id="preview-college"></div>
+      </div>
+      <div>
+        <label for="aadhar">Aadhar Card <span style="color:red">*</span></label>
+        <input type="file" id="aadhar" accept=".jpg,.jpeg,.png,.pdf" required>
+        <p class="note">Accepted formats: JPG, PNG, PDF</p>
+        <div class="preview" id="preview-aadhar"></div>
+      </div>
+      <button type="submit">Upload Documents</button>
+    </form>
+  </div>
+
+  <footer>
+    © 2025 DigiPass | D.G. Ruparel College
+  </footer>
+
+  <script type="module">
+    // Preview Function
+    function previewFile(inputId, previewId) {
+      const input = document.getElementById(inputId);
+      const preview = document.getElementById(previewId);
+
+      input.addEventListener("change", function () {
+        preview.innerHTML = ""; // clear previous
+        const file = this.files[0];
+        if (file) {
+          if (file.type.startsWith("image/")) {
+            const img = document.createElement("img");
+            img.src = URL.createObjectURL(file);
+            preview.appendChild(img);
+          } else {
+            preview.textContent = "Selected file: " + file.name;
+          }
+        }
+      });
+    }
+
+    previewFile("college-id", "preview-college");
+    previewFile("aadhar", "preview-aadhar");
+
+    
+    // Form Validation // Upload Form Submission
+    document.getElementById("uploadForm").addEventListener("submit", async function(event) {
+      event.preventDefault();
+      const collegeFile = document.getElementById("college-id").files[0];
+      const aadharFile = document.getElementById("aadhar").files[0];
+      if (!collegeFile || !aadharFile) {
+        alert("Please upload both College ID Card and Aadhar Card.");
+        return; // stop form submission
+      }
+     // Prepare FormData
+      const formData = new FormData();
+      formData.append("collegeId", collegeFile);
+      formData.append("aadhar", aadharFile);
+    
+      try {
+        const response = await fetch("http://localhost:8000/api/upload", {
+        method: "POST",
+        body: formData
+      });
+
+
+      const result = await response.json();
+
+      if (result.success) {
+        alert(result.message);
+        // Reset form & previews
+        document.getElementById("uploadForm").reset();
+        document.getElementById("preview-college").innerHTML = "";
+        document.getElementById("preview-aadhar").innerHTML = "";
+      } else {
+        alert(result.message || "Upload failed");
+      }
+      } catch (error) {
+        console.error(error)
+        alert("Server error. Please try again.");
+      }
+
+    });
+
+</script>
+
+</body>
+</html>

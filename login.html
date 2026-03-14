@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login – DigiPass</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #ffffff;
+      color: #333;
+    }
+    /* Login Form */
+    .container {
+      max-width: 400px;
+      margin: 60px auto;
+      padding: 20px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f0f0f0, #d9d9d9); /* light grey gradient */
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1); /* subtle shadow for depth */
+      border: 1px solid #ccc; /* soft border */
+      color: #333; /* default text color */
+    }
+    h1 {
+      text-align: center;
+      font-size: 2.2em;
+      font-weight: bold;
+      background: linear-gradient(90deg, #6a11cb, #2575fc);
+      -webkit-background-clip: text;   /* Chrome/Safari */
+      -webkit-text-fill-color: transparent;
+      background-clip: text;           /* Firefox */
+      color: transparent;
+      margin-bottom: 20px;
+    }
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+    label {
+      margin: 10px 0 5px;
+      font-weight: bold;
+    }
+    input {
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+    button {
+      background: linear-gradient(90deg, #6a11cb, #2575fc);
+      color: #fff;
+      padding: 10px 30px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: 0.3s;
+      margin: 15px auto;
+    }
+    button:hover {
+      background: linear-gradient(90deg, #5b0eb0, #1e63d0);
+      transform: scale(1.05);
+    }
+    /* Options */
+    .options {
+      text-align: center;
+      margin-top: 10px;
+    }
+    .options a {
+      color: #000;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .options a:hover {
+      text-decoration: underline;
+    }
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 15px;
+      background: #f8f8f8;
+      border-top: 1px solid #ddd;
+      font-size: 14px;
+      margin-top: 50px;
+    }
+  </style>
+</head>
+<body>
+<!-- Login Form -->
+  <div class="container">
+    <h1>Login</h1>
+    <form>
+      <label for="email">Email</label>
+      <input type="email" id="email" placeholder="Enter your email" required>
+      <label for="password">Password</label>
+      <input type="password" id="password" placeholder="Enter your password" required>
+      <button type="submit">Login</button>
+    </form>
+    <!-- Options -->
+    <div class="options">
+      <p><a href="signup.html">Don't have an account? Sign Up</a></p>
+      <p><a href="forgot-password.html">Forgot Password?</a></p>
+    </div>
+  </div>
+  <script>
+const form = document.querySelector('form');
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  const res = await fetch('http://localhost:8000/api/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  });
+  const data = await res.json();
+  alert(data.message);
+  if(data.message === "Login successful") {
+    // Redirect to dashboard or homepage
+    window.location.href = 'student-dashboard.html';
+  }
+});
+</script>
+  <!-- Footer -->
+  <footer>
+    © 2025 DigiPass | D.G. Ruparel College
+  </footer>
+
+</body>
+</html>
