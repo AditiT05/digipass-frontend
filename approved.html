@@ -115,7 +115,7 @@
 
   async function loadApplications() {
     try {
-      const res = await fetch("http://localhost:8000/api/concession");
+      const res = await fetch("https://digipass-backend-yyvx.onrender.com/api/concession");
       const data = await res.json();
 
       if (!data.length) {

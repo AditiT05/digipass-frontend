@@ -203,7 +203,7 @@
       formData.append("aadhar", aadharFile);
     
       try {
-        const response = await fetch("http://localhost:8000/api/upload", {
+        const response = await fetch("https://digipass-backend-yyvx.onrender.com/api/upload", {
         method: "POST",
         body: formData
       });

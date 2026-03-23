@@ -299,7 +299,7 @@
 
     try {
       // Fixed URL to match backend route
-      const res = await fetch("http://localhost:8000/api/concession", {
+      const res = await fetch("https://digipass-backend-yyvx.onrender.com/api/concession", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(obj)

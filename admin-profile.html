@@ -184,12 +184,12 @@
     const emailInput = document.getElementById('email-input');
     const saveBtn = document.getElementById('save-btn');
 
-    const API_URL = 'http://localhost:8000/api/admin';
+    const API_URL = 'https://digipass-backend-yyvx.onrender.com/api/admin';
 
     // Fetch admin info on page load
     async function loadAdminProfile() {
       try {
-        const res = await fetch('http://localhost:8000/api/admin')
+        const res = await fetch('https://digipass-backend-yyvx.onrender.com/api/admin')
         if (res.ok) {
           const data = await res.json();
           if (data) {
@@ -216,7 +216,7 @@
       };
 
       try {
-        const res = await fetch(('http://localhost:8000/api/admin'), {
+        const res = await fetch(('https://digipass-backend-yyvx.onrender.com/api/admin'), {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(adminData)
